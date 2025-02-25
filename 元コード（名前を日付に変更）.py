@@ -1,0 +1,302 @@
+# =================================================================
+
+# 161行目のアミノ酸残量、227行目のチップの位置を更新してから読み込む。
+
+# =================================================================
+
+from opentrons import protocol_api
+
+metadata = {
+    'protocolName': 'Test Protocol',
+    'apiLevel': '2.11'
+}
+
+# 各条件
+condition1 = {'AA_6':4, 'Mg_16':1, 'K_880':1, 'SPD_20':1, 'NTP_30':1, '3PGA_600':1, 'CoA_2.86':1, 'NAD_0.66':1, 'cAMP_8.25':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition2 = {'AA_3.3':4, 'Mg_88':1, 'K_880':1, 'SPD_2':1, 'NTP_16.5':1, '3PGA_60':1, 'CoA_2.86':1, 'NAD_3.63':1, 'cAMP_8.25':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition3 = {'AA_3.3':4, 'Mg_16':1, 'K_1600':1, 'SPD_2':1, 'NTP_30':1, '3PGA_600':1, 'CoA_0.52':1, 'NAD_3.63':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition4 = {'AA_0.6':4, 'Mg_160':1, 'K_1600':1, 'SPD_20':1, 'NTP_16.5':1, '3PGA_330':1, 'CoA_2.86':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition5 = {'AA_6':4, 'Mg_16':1, 'K_880':1, 'SPD_11':1, 'NTP_16.5':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_3.63':1, 'cAMP_15':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition6 = {'AA_3.3':4, 'Mg_88':1, 'K_1600':1, 'SPD_20':1, 'NTP_30':1, '3PGA_60':1, 'CoA_0.52':1, 'NAD_6.6':1, 'cAMP_8.25':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition7 = {'AA_0.6':4, 'Mg_160':1, 'K_160':1, 'SPD_20':1, 'NTP_3':1, '3PGA_330':1, 'CoA_0.52':1, 'NAD_6.6':1, 'cAMP_15':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition8 = {'AA_6':4, 'Mg_88':1, 'K_880':1, 'SPD_20':1, 'NTP_3':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_6.6':1, 'cAMP_15':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition9 = {'AA_0.6':4, 'Mg_16':1, 'K_1600':1, 'SPD_20':1, 'NTP_3':1, '3PGA_60':1, 'CoA_2.86':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition10 = {'AA_3.3':4, 'Mg_88':1, 'K_880':1, 'SPD_20':1, 'NTP_3':1, '3PGA_60':1, 'CoA_0.52':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition11 = {'AA_0.6':4, 'Mg_16':1, 'K_160':1, 'SPD_20':1, 'NTP_30':1, '3PGA_60':1, 'CoA_5.2':1, 'NAD_6.6':1, 'cAMP_1.5':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition12 = {'AA_0.6':4, 'Mg_88':1, 'K_160':1, 'SPD_11':1, 'NTP_30':1, '3PGA_600':1, 'CoA_0.52':1, 'NAD_0.66':1, 'cAMP_15':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition13 = {'AA_6':4, 'Mg_16':1, 'K_1600':1, 'SPD_20':1, 'NTP_16.5':1, '3PGA_330':1, 'CoA_2.86':1, 'NAD_6.6':1, 'cAMP_8.25':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition14 = {'AA_3.3':4, 'Mg_160':1, 'K_1600':1, 'SPD_2':1, 'NTP_3':1, '3PGA_60':1, 'CoA_5.2':1, 'NAD_3.63':1, 'cAMP_8.25':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition15 = {'AA_3.3':4, 'Mg_160':1, 'K_160':1, 'SPD_20':1, 'NTP_30':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_6.6':1, 'cAMP_1.5':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition16 = {'AA_6':4, 'Mg_88':1, 'K_1600':1, 'SPD_11':1, 'NTP_16.5':1, '3PGA_600':1, 'CoA_0.52':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition17 = {'AA_0.6':4, 'Mg_16':1, 'K_880':1, 'SPD_20':1, 'NTP_30':1, '3PGA_600':1, 'CoA_5.2':1, 'NAD_3.63':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition18 = {'AA_6':4, 'Mg_88':1, 'K_160':1, 'SPD_11':1, 'NTP_16.5':1, '3PGA_60':1, 'CoA_5.2':1, 'NAD_3.63':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition19 = {'AA_6':4, 'Mg_160':1, 'K_1600':1, 'SPD_2':1, 'NTP_30':1, '3PGA_600':1, 'CoA_0.52':1, 'NAD_3.63':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition20 = {'AA_6':4, 'Mg_16':1, 'K_880':1, 'SPD_20':1, 'NTP_3':1, '3PGA_60':1, 'CoA_2.86':1, 'NAD_0.66':1, 'cAMP_15':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition21 = {'AA_0.6':4, 'Mg_160':1, 'K_880':1, 'SPD_20':1, 'NTP_3':1, '3PGA_60':1, 'CoA_2.86':1, 'NAD_6.6':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition22 = {'AA_0.6':4, 'Mg_160':1, 'K_160':1, 'SPD_20':1, 'NTP_16.5':1, '3PGA_60':1, 'CoA_0.52':1, 'NAD_0.66':1, 'cAMP_15':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition23 = {'AA_3.3':4, 'Mg_16':1, 'K_160':1, 'SPD_2':1, 'NTP_16.5':1, '3PGA_330':1, 'CoA_2.86':1, 'NAD_6.6':1, 'cAMP_15':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition24 = {'AA_6':4, 'Mg_16':1, 'K_160':1, 'SPD_2':1, 'NTP_3':1, '3PGA_60':1, 'CoA_2.86':1, 'NAD_0.66':1, 'cAMP_8.25':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition25 = {'AA_6':4, 'Mg_16':1, 'K_160':1, 'SPD_20':1, 'NTP_30':1, '3PGA_600':1, 'CoA_0.52':1, 'NAD_6.6':1, 'cAMP_8.25':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition26 = {'AA_6':4, 'Mg_160':1, 'K_160':1, 'SPD_2':1, 'NTP_16.5':1, '3PGA_600':1, 'CoA_5.2':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition27 = {'AA_3.3':4, 'Mg_88':1, 'K_160':1, 'SPD_20':1, 'NTP_30':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_3.63':1, 'cAMP_1.5':1, 'Folin_0.748':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition28 = {'AA_0.6':4, 'Mg_16':1, 'K_1600':1, 'SPD_20':1, 'NTP_3':1, '3PGA_600':1, 'CoA_5.2':1, 'NAD_6.6':1, 'cAMP_1.5':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition29 = {'AA_3.3':4, 'Mg_16':1, 'K_160':1, 'SPD_2':1, 'NTP_30':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_6.6':1, 'cAMP_15':1, 'Folin_0.136':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+condition30 = {'AA_0.6':4, 'Mg_160':1, 'K_880':1, 'SPD_20':1, 'NTP_30':1, '3PGA_330':1, 'CoA_5.2':1, 'NAD_0.66':1, 'cAMP_1.5':1, 'Folin_1.36':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':4, }
+
+
+# =====================================================
+
+# ネガティブコントロール
+negative_control = {
+    'AA_6':4,  
+    'Mg_160':1, 
+    'K_1600':1, 
+    'SPD_20':1, 
+    'NTP_30':1, 
+    '3PGA_600':1, 
+    'CoA_5.2':1,
+    'NAD_6.6':1,
+    'cAMP_15':1,
+    'Folin_1.36':1,
+    'PEG':1, 
+    'mixture':1,
+    'milliQ':1,
+    'cell_extract':4, 
+}
+
+# ポジティブコントロール
+positive_control = {
+    'AA_6':4,  
+    'Mg_160':1, 
+    'K_1600':1, 
+    'SPD_20':1, 
+    'NTP_30':1, 
+    '3PGA_600':1, 
+    'CoA_5.2':1,
+    'NAD_6.6':1,
+    'cAMP_15':1,
+    'Folin_1.36':1,
+    'PEG':1, 
+    'mixture':1,
+    'DNA':1,
+    'cell_extract':4, 
+}
+
+# 各条件を入れるウェルを指定する
+well_num = {
+    'condition1': 'B2',
+    'condition2': 'D2',
+    'condition3': 'F2',
+    'condition4': 'H2',
+    'condition5': 'J2',
+    'condition6': 'L2',
+    'condition7': 'N2',
+    'condition8': 'C4',
+    'condition9': 'E4',
+    'condition10': 'G4',
+    'condition11': 'I4',
+    'condition12': 'K4',
+    'condition13': 'M4',
+    'condition14': 'O4',
+    'condition15': 'B6',
+    'condition16': 'D6',
+    'condition17': 'F6',
+    'condition18': 'H6',
+    'condition19': 'J6',
+    'condition20': 'L6',
+    'condition21': 'N6',
+    'condition22': 'C8',
+    'condition23': 'E8',
+    'condition24': 'G8',
+    'condition25': 'I8',
+    'condition26': 'K8',
+    'condition27': 'M8',
+    'condition28': 'O8',
+    'condition29': 'B10',
+    'condition30': 'D10',
+    'positive_control_1': 'F10',
+    'positive_control_2': 'H10',
+    'negative_control_1': 'J10',
+    'negative_control_2': 'L10',
+}
+
+
+
+#===================
+# 各条件の文字列と辞書型の変数を対応させる
+
+conditions = {
+    'positive_control_1': positive_control,
+    'positive_control_2': positive_control,
+    'condition1': condition1,
+    'condition2': condition2,
+    'condition3': condition3,
+    'condition4': condition4,
+    'condition5': condition5,
+    'condition6': condition6,
+    'condition7': condition7,
+    'condition8': condition8,
+    'condition9': condition9,
+    'condition10': condition10,
+    'condition11': condition11,
+    'condition12': condition12,
+    'condition13': condition13,
+    'condition14': condition14,
+    'condition15': condition15,
+    'condition16': condition16,
+    'condition17': condition17,
+    'condition18': condition18,
+    'condition19': condition19,
+    'condition20': condition20,
+    'condition21': condition21,
+    'condition22': condition22,
+    'condition23': condition23,
+    'condition24': condition24,
+    'condition25': condition25,
+    'condition26': condition26,
+    'condition27': condition27,
+    'condition28': condition28,
+    'condition29': condition29,
+    'condition30': condition30,
+    'negative_control_1': negative_control,
+    'negative_control_2': negative_control,
+}
+
+
+# 各チューブの残量を記録する
+tube_volume = {
+    'AA_6': 200,
+    'AA_3.3': 200,
+    'AA_0.6': 200,
+    'cell_extract': 200,
+}
+
+# =======================
+def run(protocol: protocol_api.ProtocolContext):
+    tip_rack_p20 = protocol.load_labware('opentrons_96_tiprack_20ul', 8)
+    tip_rack_p20_2 = protocol.load_labware('opentrons_96_tiprack_20ul', 9)
+    tip_rack_p20_3 = protocol.load_labware('opentrons_96_tiprack_20ul', 7)
+    tip_rack_p20_4 = protocol.load_labware('opentrons_96_tiprack_20ul', 4)
+    tip_rack_p20_5 = protocol.load_labware('opentrons_96_tiprack_20ul', 2)
+    tip_rack_p20_6 = protocol.load_labware('opentrons_96_tiprack_20ul', 1)
+    tip_rack_p20_7 = protocol.load_labware('opentrons_96_tiprack_20ul', 11)
+
+    tip_rack_p300 = protocol.load_labware('opentrons_96_tiprack_300ul', 10)
+    
+    tube_rack = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 6)
+    tube_rack_2 = protocol.load_labware('opentrons_24_tuberack_eppendorf_1.5ml_safelock_snapcap', 3)
+    
+    # チューブラックに設置するする各溶液の種類・濃度とチューブの位置を決める
+    tube_data = {
+        'AA_6': (tube_rack['A1']),
+        'AA_3.3': (tube_rack['A2']),
+        'AA_0.6': (tube_rack['A3']),
+        'Mg_160': (tube_rack['A4']),
+        'Mg_88': (tube_rack['A5']),
+        'Mg_16': (tube_rack['A6']),
+        'K_1600': (tube_rack['B1']),
+        'K_880': (tube_rack['B2']),
+        'K_160': (tube_rack['B3']),
+        'SPD_20': (tube_rack['B4']),
+        'SPD_11': (tube_rack['B5']),
+        'SPD_2': (tube_rack['B6']),
+        'NTP_30': (tube_rack['C1']),
+        'NTP_16.5': (tube_rack['C2']),
+        'NTP_3': (tube_rack['C3']),
+        '3PGA_600': (tube_rack['C4']),
+        '3PGA_330': (tube_rack['C5']),
+        '3PGA_60': (tube_rack['C6']),
+        'CoA_5.2': (tube_rack['D1']),
+        'CoA_2.86': (tube_rack['D2']),
+        'CoA_0.52': (tube_rack['D3']),
+        'NAD_6.6': (tube_rack['D4']),
+        'NAD_3.63': (tube_rack['D5']),
+        'NAD_0.66': (tube_rack['D6']),
+        'cAMP_15': (tube_rack_2['A1']),
+        'cAMP_8.25': (tube_rack_2['A2']),
+        'cAMP_1.5': (tube_rack_2['A3']),
+        'Folin_1.36': (tube_rack_2['A4']),
+        'Folin_0.748': (tube_rack_2['A5']),
+        'Folin_0.136': (tube_rack_2['A6']),
+        'PEG': (tube_rack_2['B1']),
+        'mixture': (tube_rack_2['B2']),
+        'milliQ': (tube_rack_2['B3']),
+        'DNA': (tube_rack_2['B4']),
+        'cell_extract': (tube_rack_2['B5']),
+    }
+
+    well_plate_384 = protocol.load_labware('corning_384_wellplate_112ul_flat', 5)
+
+ 
+    # 最初のチップがある位置を設定する
+    left_pipette = protocol.load_instrument('p20_single_gen2', 'left', tip_racks=[tip_rack_p20,tip_rack_p20_2,tip_rack_p20_3,tip_rack_p20_4,tip_rack_p20_5,tip_rack_p20_6,tip_rack_p20_7])
+    left_pipette.starting_tip = tip_rack_p20['C12']
+    
+    right_pipette = protocol.load_instrument('p300_single_gen2', 'right', tip_racks=[tip_rack_p300])
+    right_pipette.starting_tip = tip_rack_p300['D1']
+
+
+    # 分注させるためのコード
+    for i in range(len(positive_control)):
+            for k,v in conditions.items():
+                # ex.)k='conditiion1', v={'AA_6':5, 'milliQ':1, 'Mg_80':2, 'K_1600':1, 'SPD_20':1, 'NTP_25':1, '3PGA_600':1, 'PEG':1, 'mixture':1, 'DNA':1, 'cell_extract':5}
+                key_list = list(v.keys())
+                value_list = list(v.values())
+                
+                key = key_list[i]
+                value = value_list[i]
+                print(key,value)
+                    
+                # アミノ酸を入れる前にはピペッティングする
+                if 'AA' in key :
+                    pipetting_volume = tube_volume[key]*0.9
+                    if pipetting_volume <= 20:
+                        left_pipette.pick_up_tip()
+                        left_pipette.mix(5, pipetting_volume, tube_data[key])
+                        left_pipette.drop_tip()
+                    else:
+                        right_pipette.pick_up_tip()
+                        right_pipette.mix(5, pipetting_volume, tube_data[key])
+                        right_pipette.drop_tip()
+
+                    left_pipette.transfer(int(value), tube_data[key], well_plate_384[well_num[k]], new_tip='always')
+                    tube_volume[key] -= int(value)
+                
+                # 細胞抽出液を入れる前にはピペッティングする
+                elif key == 'cell_extract':
+                    pass
+                else:
+                    left_pipette.transfer(int(value), tube_data[key], well_plate_384[well_num[k]], new_tip='always')
+    
+
+    # 最後に細胞抽出液を各セルに入れる(ピペッティングの回数を減らすため)                 
+    # 細胞抽出液の攪拌する量を決める
+    if tube_volume["cell_extract"]>100:
+        pipetting_volume = tube_volume["cell_extract"]*0.5
+    else:
+        pipetting_volume = tube_volume["cell_extract"]*0.3
+
+    # 細胞抽出液を攪拌する
+    if pipetting_volume <= 20:
+        left_pipette.pick_up_tip()
+        left_pipette.mix(5, pipetting_volume, tube_data[key],rate=0.5)
+        left_pipette.drop_tip()
+    else:
+        right_pipette.pick_up_tip()
+        right_pipette.mix(5, pipetting_volume, tube_data[key],rate=0.5)
+        right_pipette.drop_tip()
+
+
+    # 分注する
+    for k,v in conditions.items():
+        left_pipette.transfer(int(v["cell_extract"]), tube_data["cell_extract"], well_plate_384[well_num[k]], new_tip='always')
+        tube_volume["cell_extract"] -= int(v["cell_extract"])
+
+
+            
+    # 最後に全セルをピペッティングする
+    for k,v in conditions.items():
+        left_pipette.pick_up_tip()
+        left_pipette.mix(5, 10, well_plate_384[well_num[k]])
+        left_pipette.drop_tip()
+    
